@@ -6,12 +6,11 @@
 package config
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"github.com/google/wire"
 )
 
-func NewWire() (*fiber.App, error) {
-	wire.Build(wire.NewSet(AllSet))
+func NewWire() HTTPServiceInterface {
+	wire.Build(AllSet)
 
-	return nil, nil
+	return &HTTPService{}
 }

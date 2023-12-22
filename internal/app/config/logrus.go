@@ -2,14 +2,14 @@ package config
 
 import (
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 )
 
-func NewLogger(viper *viper.Viper) *logrus.Logger {
+func NewLogger(config *envConfigs) *logrus.Logger {
 	log := logrus.New()
 
-	log.SetLevel(logrus.Level(viper.GetInt32("LOG_LEVEL")))
+	log.SetLevel(logrus.Level(config.LogLever))
 
+	log.SetReportCaller(true)
 	log.SetFormatter(&logrus.JSONFormatter{})
 
 	return log

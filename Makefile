@@ -1,14 +1,14 @@
 migrate:
-	go run ./package/migrations/main.go -method=up
+	go run ./pkg/migrations/main.go -method=up
 
 migrate-down:
-	go run ./package/migrations/main.go -method=down
+	go run ./pkg/migrations/main.go -method=down
 
 migrate-fresh:
-	go run ./package/migrations/main.go -method=fresh
+	go run ./pkg/migrations/main.go -method=fresh
 
 migrate-seed:
-	go run ./package/seeds/main.go
+	go run ./pkg/seeds/main.go
 
 wire:
 	cd internal/app/config && go generate

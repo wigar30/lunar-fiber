@@ -1,11 +1,11 @@
 package config
 
 import (
+	"lunar-commerce-fiber/internal/presenter/http/controller"
+
+	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/google/wire"
-	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 )
 
 var (
@@ -13,25 +13,30 @@ var (
 		NewViper,
 		NewLogger,
 		NewFiber,
+		NewConnMySql,
+		NewListenApp,
+	)
+
+	ControllerSet = wire.NewSet(
+		controller.NewController,
 	)
 
 	AllSet = wire.NewSet(
 		AppSet,
+		ControllerSet,
 	)
 )
 
-func NewFiber(config *viper.Viper) *fiber.App {
+func NewFiber(config *envConfigs) *fiber.App {
 	app := fiber.New(fiber.Config{
-		AppName: config.GetString("APP_NAME"),
+		AppName: config.AppName,
 		ErrorHandler: NewErrorHandler(),
-		Prefork: config.GetString("APP_ENV") == "production",
+		Prefork: config.AppEnv == "production",
+
+		JSONEncoder: json.Marshal,
+		JSONDecoder: json.Unmarshal,
 	})
 
-	app.Use(cors.New(cors.Config{
-		AllowOrigins: "*",
-	}))
-
-	logrus.Info("Application is running...")
 	return app
 }
 

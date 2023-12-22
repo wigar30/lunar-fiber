@@ -7,13 +7,16 @@
 package config
 
 import (
-	"github.com/gofiber/fiber/v2"
+	"lunar-commerce-fiber/internal/presenter/http/controller"
 )
 
 // Injectors from wire.go:
 
-func NewWire() (*fiber.App, error) {
-	viper := NewViper()
-	app := NewFiber(viper)
-	return app, nil
+func NewWire() HTTPServiceInterface {
+	configEnvConfigs := NewViper()
+	app := NewFiber(configEnvConfigs)
+	controllerController := controller.NewController()
+	logger := NewLogger(configEnvConfigs)
+	httpServiceInterface := NewListenApp(app, controllerController, configEnvConfigs, logger)
+	return httpServiceInterface
 }

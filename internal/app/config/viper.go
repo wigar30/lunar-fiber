@@ -9,17 +9,21 @@ import (
 var EnvConfigs *envConfigs
 
 type envConfigs struct {
-	DbConnection string `mapstructure:"DB_CONNECTION"`
-	DbHost       string `mapstructure:"DB_HOST"`
-	DbPort       string `mapstructure:"DB_PORT"`
-	DbDatabase   string `mapstructure:"DB_DATABASE"`
-	DbUsername   string `mapstructure:"DB_USERNAME"`
-	DbPassword   string `mapstructure:"DB_PASSWORD"`
+	AppName string
+	AppEnv  string
+	AppPort string
 
-	LogLever string `mapstructure:"DB_PASSWORD"`
+	DbConnection string
+	DbHost       string
+	DbPort       string
+	DbDatabase   string
+	DbUsername   string
+	DbPassword   string
+
+	LogLever int32 `mapstructure:"DB_PASSWORD"`
 }
 
-func NewViper() *viper.Viper {
+func NewViper() *envConfigs {
 	config := viper.New()
 
 	config.SetConfigName(".env")
@@ -27,10 +31,22 @@ func NewViper() *viper.Viper {
 	config.AddConfigPath("./")
 	config.AutomaticEnv()
 
-
 	if err := config.ReadInConfig(); err != nil {
 		log.Fatal("Error reading env file", err)
 	}
 
-	return config
+	return &envConfigs{
+		AppName: config.GetString("APP_NAME"),
+		AppEnv:  config.GetString("APP_ENV"),
+		AppPort: config.GetString("APP_PORT"),
+
+		DbConnection: config.GetString("DB_CONNECTION"),
+		DbHost:       config.GetString("DB_HOST"),
+		DbPort:       config.GetString("DB_PORT"),
+		DbDatabase:   config.GetString("DB_DATABASE"),
+		DbUsername:   config.GetString("DB_USERNAME"),
+		DbPassword:   config.GetString("DB_PASSWORD"),
+
+		LogLever: config.GetInt32("LOG_LEVEL"),
+	}
 }
