@@ -14,6 +14,9 @@ type ErrorResponse struct {
 	Message string `json:"message"`
 	Detail  string `json:"details,omitempty"`
 }
+func (e ErrorResponse) Error() string {
+	return e.Message
+}
 
 type PageMetadata struct {
 	Page      int   `json:"page"`

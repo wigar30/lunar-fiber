@@ -6,9 +6,9 @@ import (
 	"github.com/spf13/viper"
 )
 
-var EnvConfigs *envConfigs
+var Env *EnvConfigs
 
-type envConfigs struct {
+type EnvConfigs struct {
 	AppName string
 	AppEnv  string
 	AppPort string
@@ -23,7 +23,7 @@ type envConfigs struct {
 	LogLever int32 `mapstructure:"DB_PASSWORD"`
 }
 
-func NewViper() *envConfigs {
+func NewViper() *EnvConfigs {
 	config := viper.New()
 
 	config.SetConfigName(".env")
@@ -35,7 +35,7 @@ func NewViper() *envConfigs {
 		log.Fatal("Error reading env file", err)
 	}
 
-	return &envConfigs{
+	return &EnvConfigs{
 		AppName: config.GetString("APP_NAME"),
 		AppEnv:  config.GetString("APP_ENV"),
 		AppPort: config.GetString("APP_PORT"),

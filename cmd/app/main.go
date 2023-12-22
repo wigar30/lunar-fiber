@@ -1,10 +1,10 @@
 package main
 
 import (
-	"lunar-commerce-fiber/internal/app/config"
+	"lunar-commerce-fiber/internal/app"
 )
 
 func main() {
-	app := config.NewWire()
+	app := app.NewWire()
 	app.ListenApp()
 }

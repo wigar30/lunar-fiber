@@ -4,7 +4,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func NewLogger(config *envConfigs) *logrus.Logger {
+func NewLogger(config *EnvConfigs) *logrus.Logger {
 	log := logrus.New()
 
 	log.SetLevel(logrus.Level(config.LogLever))

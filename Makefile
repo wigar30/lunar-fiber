@@ -11,7 +11,7 @@ migrate-seed:
 	go run ./pkg/seeds/main.go
 
 wire:
-	cd internal/app/config && go generate
+	cd internal/app && go generate
 
 dev:
 	. ${HOME}/.nvm/nvm.sh && nvm use 18 && npx nodemon --exec go run ./cmd/app/main.go --signal SIGTERM

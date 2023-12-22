@@ -11,8 +11,12 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-func NewConnMySql(config *envConfigs, logrus *logrus.Logger) (db *gorm.DB, err error) {
-	conn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", config.DbUsername, config.DbPassword, config.DbHost, config.DbPort, config.DbDatabase)
+type Database struct {
+	*gorm.DB
+}
+
+func NewConnMySql(config *EnvConfigs, logrus *logrus.Logger) *Database {
+	conn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", config.DbUsername, config.DbPassword, config.DbHost, config.DbPort, config.DbDatabase)
 
 	w := logrus.Writer()
 	defer w.Close()
@@ -28,15 +32,17 @@ func NewConnMySql(config *envConfigs, logrus *logrus.Logger) (db *gorm.DB, err e
 		},
 	)
 
-	db, err = gorm.Open(mysql.Open(conn), &gorm.Config{
+	db, err := gorm.Open(mysql.Open(conn), &gorm.Config{
 		Logger: newLogger,
 	})
 
 	if err != nil {
-		return nil, err
+		logrus.Errorf("failed to connect database: %v", err)
 	}
 
 	logrus.Info("Database connected")
 
-	return
+	return &Database{
+		DB: db,
+	}
 }

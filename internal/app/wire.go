@@ -3,14 +3,16 @@
 
 // The build tag makes sure the stub is not built in the final build.
 
-package config
+package app
 
 import (
 	"github.com/google/wire"
+	"lunar-commerce-fiber/internal/app/config"
+
 )
 
-func NewWire() HTTPServiceInterface {
+func NewWire() config.HTTPServiceInterface {
 	wire.Build(AllSet)
 
-	return &HTTPService{}
+	return &config.HTTPService{}
 }

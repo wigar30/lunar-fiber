@@ -17,11 +17,11 @@ type HTTPServiceInterface interface {
 type HTTPService struct {
 	app    *fiber.App
 	ctrl   *controller.Controller
-	config *envConfigs
+	config *EnvConfigs
 	log    *logrus.Logger
 }
 
-func NewListenApp(app *fiber.App, ctrl *controller.Controller, config *envConfigs, log *logrus.Logger) HTTPServiceInterface {
+func NewListenApp(app *fiber.App, ctrl *controller.Controller, config *EnvConfigs, log *logrus.Logger) HTTPServiceInterface {
 	return &HTTPService{
 		app:    app,
 		ctrl:   ctrl,
