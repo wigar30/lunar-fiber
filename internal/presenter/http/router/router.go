@@ -16,4 +16,5 @@ func Route(f *fiber.App, ctrl *controller.Controller) {
 	role := v1.Group("role")
 
 	role.Get("/", ctrl.Role.GetAll)
+	role.Get("/:id", ctrl.Role.GetByID)
 }

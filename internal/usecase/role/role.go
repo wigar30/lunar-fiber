@@ -15,9 +15,9 @@ func (ru RoleUseCase) GetAll(c *fiber.Ctx) (*model.RolesResponse, error) {
 		}
 	}
 
-	var roleResponses []*model.RoleResponse
+	var rolesResponses []*model.RoleResponse
 	for _, role := range roles {
-		roleResponses = append(roleResponses, &model.RoleResponse{
+		rolesResponses = append(rolesResponses, &model.RoleResponse{
 			// Copy values from role to RoleResponse
 			ID:   role.ID,
 			Name: role.Name,
@@ -26,6 +26,21 @@ func (ru RoleUseCase) GetAll(c *fiber.Ctx) (*model.RolesResponse, error) {
 	}
 
 	return &model.RolesResponse{
-		Items: roleResponses,
+		Items: rolesResponses,
+	}, nil
+}
+
+func (ru RoleUseCase) GetByID(roleId int64) (*model.RoleResponse, error) {
+	role, err := ru.roleRepo.GetByID(roleId)
+	if errC, ok := err.(*model.ErrorResponse); ok {
+		return nil, &model.ErrorResponse{
+			Code: errC.Code,
+			Message: errC.Error(),
+		}
+	}
+
+	return &model.RoleResponse{
+		ID: role.ID,
+		Name: role.Name,
 	}, nil
 }

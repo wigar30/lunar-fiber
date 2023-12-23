@@ -34,6 +34,7 @@ func NewConnMySql(config *EnvConfigs, logrus *logrus.Logger) *Database {
 
 	db, err := gorm.Open(mysql.Open(conn), &gorm.Config{
 		Logger: newLogger,
+		TranslateError: true,
 	})
 
 	if err != nil {
