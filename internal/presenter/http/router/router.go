@@ -13,6 +13,10 @@ func Route(f *fiber.App, ctrl *controller.Controller) {
 
 	v1.Get("/ping", ctrl.Ping)
 
+	auth := v1.Group("auth")
+
+	auth.Post("/login", ctrl.Auth.Login)
+
 	role := v1.Group("role")
 
 	role.Get("/", ctrl.Role.GetAll)

@@ -20,7 +20,10 @@ type EnvConfigs struct {
 	DbUsername   string
 	DbPassword   string
 
-	LogLever int32 `mapstructure:"DB_PASSWORD"`
+	LogLever int32
+
+	JwtSecret    string
+	JwtExpiredIn string
 }
 
 func NewViper() *EnvConfigs {
@@ -48,5 +51,8 @@ func NewViper() *EnvConfigs {
 		DbPassword:   config.GetString("DB_PASSWORD"),
 
 		LogLever: config.GetInt32("LOG_LEVEL"),
+
+		JwtSecret:    config.GetString("AUTH_JWT_SECRET"),
+		JwtExpiredIn: config.GetString("AUTH_JWT_TOKEN_EXPIRES_IN"),
 	}
 }

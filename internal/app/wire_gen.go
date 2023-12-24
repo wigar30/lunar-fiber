@@ -9,8 +9,11 @@ package app
 import (
 	"lunar-commerce-fiber/internal/app/config"
 	"lunar-commerce-fiber/internal/presenter/http/controller"
+	auth2 "lunar-commerce-fiber/internal/presenter/http/controller/auth"
 	role3 "lunar-commerce-fiber/internal/presenter/http/controller/role"
 	"lunar-commerce-fiber/internal/repository/role"
+	"lunar-commerce-fiber/internal/repository/user"
+	"lunar-commerce-fiber/internal/usecase/auth"
 	role2 "lunar-commerce-fiber/internal/usecase/role"
 )
 
@@ -24,7 +27,10 @@ func NewWire() config.HTTPServiceInterface {
 	roleRepositoryInterface := role.NewRoleRepository(database)
 	roleUseCaseInterface := role2.NewRoleUseCase(roleRepositoryInterface)
 	roleController := role3.NewRoleController(roleUseCaseInterface)
-	controllerController := controller.NewController(roleController)
+	userRepositoryInterface := user.NewUserRepository(database)
+	authUseCaseInterface := auth.NewAuthUseCase(userRepositoryInterface, envConfigs)
+	authController := auth2.NewAuthController(authUseCaseInterface)
+	controllerController := controller.NewController(roleController, authController)
 	httpServiceInterface := config.NewListenApp(app, controllerController, envConfigs, logger)
 	return httpServiceInterface
 }

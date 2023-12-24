@@ -3,8 +3,11 @@ package app
 import (
 	"lunar-commerce-fiber/internal/app/config"
 	"lunar-commerce-fiber/internal/presenter/http/controller"
+	authCtrl "lunar-commerce-fiber/internal/presenter/http/controller/auth"
 	roleCtrl "lunar-commerce-fiber/internal/presenter/http/controller/role"
 	roleRepo "lunar-commerce-fiber/internal/repository/role"
+	userRepo "lunar-commerce-fiber/internal/repository/user"
+	authUC "lunar-commerce-fiber/internal/usecase/auth"
 	roleUC "lunar-commerce-fiber/internal/usecase/role"
 
 	"github.com/goccy/go-json"
@@ -24,14 +27,17 @@ var (
 	ControllerSet = wire.NewSet(
 		controller.NewController,
 		roleCtrl.NewRoleController,
+		authCtrl.NewAuthController,
 	)
 
 	UseCaseSet = wire.NewSet(
 		roleUC.NewRoleUseCase,
+		authUC.NewAuthUseCase,
 	)
 
 	RepositorySet = wire.NewSet(
 		roleRepo.NewRoleRepository,
+		userRepo.NewUserRepository,
 	)
 
 	AllSet = wire.NewSet(

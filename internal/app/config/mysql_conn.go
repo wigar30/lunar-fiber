@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -18,11 +19,8 @@ type Database struct {
 func NewConnMySql(config *EnvConfigs, logrus *logrus.Logger) *Database {
 	conn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", config.DbUsername, config.DbPassword, config.DbHost, config.DbPort, config.DbDatabase)
 
-	w := logrus.Writer()
-	defer w.Close()
-
 	newLogger := logger.New(
-		log.New(w, "\r\n", log.LstdFlags), // io writer
+		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
 		logger.Config{
 			SlowThreshold:             time.Second, // Slow SQL threshold
 			LogLevel:                  logger.Info, // Log level
