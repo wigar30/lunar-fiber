@@ -1,4 +1,4 @@
 /vendor
 .env
 /temp
-app
+/app
