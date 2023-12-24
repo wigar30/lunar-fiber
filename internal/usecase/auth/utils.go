@@ -1,14 +1,14 @@
 package auth
 
 import (
-	"lunar-commerce-fiber/internal/app/config"
+	"lunar-commerce-fiber/internal/model"
 	"strconv"
 	"time"
 
 	"github.com/golang-jwt/jwt"
 )
 
-func GenerateAccessToken(config *config.EnvConfigs, id string, role int) (string, error) {
+func GenerateAccessToken(config *model.EnvConfigs, id string, role int) (string, error) {
 	token_lifespan, err := strconv.Atoi(config.JwtExpiredIn)
 
 	if err != nil {

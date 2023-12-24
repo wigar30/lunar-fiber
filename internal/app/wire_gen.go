@@ -8,13 +8,17 @@ package app
 
 import (
 	"lunar-commerce-fiber/internal/app/config"
+	"lunar-commerce-fiber/internal/app/driver"
 	"lunar-commerce-fiber/internal/presenter/http/controller"
 	auth2 "lunar-commerce-fiber/internal/presenter/http/controller/auth"
 	role3 "lunar-commerce-fiber/internal/presenter/http/controller/role"
+	user3 "lunar-commerce-fiber/internal/presenter/http/controller/user"
+	"lunar-commerce-fiber/internal/presenter/http/middleware"
 	"lunar-commerce-fiber/internal/repository/role"
 	"lunar-commerce-fiber/internal/repository/user"
 	"lunar-commerce-fiber/internal/usecase/auth"
 	role2 "lunar-commerce-fiber/internal/usecase/role"
+	user2 "lunar-commerce-fiber/internal/usecase/user"
 )
 
 // Injectors from wire.go:
@@ -23,14 +27,17 @@ func NewWire() config.HTTPServiceInterface {
 	envConfigs := config.NewViper()
 	app := NewFiber(envConfigs)
 	logger := config.NewLogger(envConfigs)
-	database := config.NewConnMySql(envConfigs, logger)
+	database := driver.NewConnMySql(envConfigs, logger)
 	roleRepositoryInterface := role.NewRoleRepository(database)
 	roleUseCaseInterface := role2.NewRoleUseCase(roleRepositoryInterface)
 	roleController := role3.NewRoleController(roleUseCaseInterface)
 	userRepositoryInterface := user.NewUserRepository(database)
 	authUseCaseInterface := auth.NewAuthUseCase(userRepositoryInterface, envConfigs)
 	authController := auth2.NewAuthController(authUseCaseInterface)
-	controllerController := controller.NewController(roleController, authController)
-	httpServiceInterface := config.NewListenApp(app, controllerController, envConfigs, logger)
+	userUseCaseInterface := user2.NewUserUseCase(userRepositoryInterface)
+	userController := user3.NewUserController(userUseCaseInterface)
+	controllerController := controller.NewController(roleController, authController, userController)
+	middlewareMiddleware := middleware.NewMiddleware(userRepositoryInterface, envConfigs)
+	httpServiceInterface := config.NewListenApp(app, controllerController, envConfigs, logger, middlewareMiddleware)
 	return httpServiceInterface
 }

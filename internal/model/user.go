@@ -14,4 +14,9 @@ type UserResponse struct {
 
 type UserRepositoryInterface interface {
 	GetUserByEmail(string) (*entity.User, error)
+	GetUserByID(int64, bool) (*entity.User, error)
+}
+
+type UserUseCaseInterface interface {
+	GetUserByID(int64) (*UserResponse, error)
 }

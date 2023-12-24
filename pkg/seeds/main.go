@@ -2,13 +2,14 @@ package main
 
 import (
 	"lunar-commerce-fiber/internal/app/config"
+	"lunar-commerce-fiber/internal/app/driver"
 	"lunar-commerce-fiber/pkg/seeds/query"
 )
 
 func main() {
 	envConfigs := config.NewViper()
 	logger := config.NewLogger(envConfigs)
-	db := config.NewConnMySql(envConfigs, logger)
+	db := driver.NewConnMySql(envConfigs, logger)
 
 	var err error
 	err = query.RoleSeed(db)

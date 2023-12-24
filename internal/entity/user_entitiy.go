@@ -10,7 +10,7 @@ func (u *User) TableName() string {
 }
 
 type User struct {
-	ID            string       `json:"id" gorm:"primaryKey;type:uuid;default:uuid_generate_v4()"`
+	ID            string       `json:"id" gorm:"primaryKey;autoIncrement"`
 	Email         string       `json:"email,omitempty" gorm:"unique;not null"`
 	Password      string       `json:"-"`
 	Name          string       `json:"name,omitempty"`

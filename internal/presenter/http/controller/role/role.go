@@ -8,6 +8,7 @@ import (
 )
 
 func (rc RoleController) GetAll(c *fiber.Ctx) error {
+	// claimsCtx, ok := c.Locals("claims").(*model.JwtClaims)
 	resp, err := rc.roleUseCase.GetAll(c)
 	if err != nil {
 		return model.OnError(c, &model.ErrorResponse{

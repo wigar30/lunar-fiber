@@ -2,7 +2,9 @@ package config
 
 import (
 	"fmt"
+	"lunar-commerce-fiber/internal/model"
 	"lunar-commerce-fiber/internal/presenter/http/controller"
+	"lunar-commerce-fiber/internal/presenter/http/middleware"
 	"lunar-commerce-fiber/internal/presenter/http/router"
 
 	"github.com/gofiber/fiber/v2"
@@ -17,16 +19,18 @@ type HTTPServiceInterface interface {
 type HTTPService struct {
 	app    *fiber.App
 	ctrl   *controller.Controller
-	config *EnvConfigs
+	config *model.EnvConfigs
 	log    *logrus.Logger
+	mdlwr  *middleware.Middleware
 }
 
-func NewListenApp(app *fiber.App, ctrl *controller.Controller, config *EnvConfigs, log *logrus.Logger) HTTPServiceInterface {
+func NewListenApp(app *fiber.App, ctrl *controller.Controller, config *model.EnvConfigs, log *logrus.Logger, mdlwr *middleware.Middleware) HTTPServiceInterface {
 	return &HTTPService{
 		app:    app,
 		ctrl:   ctrl,
 		config: config,
 		log:    log,
+		mdlwr:  mdlwr,
 	}
 }
 
@@ -35,7 +39,7 @@ func (f *HTTPService) ListenApp() error {
 		AllowOrigins: "*",
 	}))
 
-	router.Route(f.app, f.ctrl)
+	router.Route(f.app, f.ctrl, f.mdlwr)
 
 	f.log.Info("Application is running...")
 	port := f.config.AppPort

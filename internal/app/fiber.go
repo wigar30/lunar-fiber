@@ -2,13 +2,18 @@ package app
 
 import (
 	"lunar-commerce-fiber/internal/app/config"
+	"lunar-commerce-fiber/internal/app/driver"
+	"lunar-commerce-fiber/internal/model"
 	"lunar-commerce-fiber/internal/presenter/http/controller"
 	authCtrl "lunar-commerce-fiber/internal/presenter/http/controller/auth"
 	roleCtrl "lunar-commerce-fiber/internal/presenter/http/controller/role"
+	userCtrl "lunar-commerce-fiber/internal/presenter/http/controller/user"
+	"lunar-commerce-fiber/internal/presenter/http/middleware"
 	roleRepo "lunar-commerce-fiber/internal/repository/role"
 	userRepo "lunar-commerce-fiber/internal/repository/user"
 	authUC "lunar-commerce-fiber/internal/usecase/auth"
 	roleUC "lunar-commerce-fiber/internal/usecase/role"
+	userUC "lunar-commerce-fiber/internal/usecase/user"
 
 	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
@@ -19,8 +24,8 @@ var (
 	AppSet = wire.NewSet(
 		config.NewViper,
 		config.NewLogger,
-		config.NewConnMySql,
 		config.NewListenApp,
+		driver.NewConnMySql,
 		NewFiber,
 	)
 
@@ -28,11 +33,13 @@ var (
 		controller.NewController,
 		roleCtrl.NewRoleController,
 		authCtrl.NewAuthController,
+		userCtrl.NewUserController,
 	)
 
 	UseCaseSet = wire.NewSet(
 		roleUC.NewRoleUseCase,
 		authUC.NewAuthUseCase,
+		userUC.NewUserUseCase,
 	)
 
 	RepositorySet = wire.NewSet(
@@ -40,15 +47,21 @@ var (
 		userRepo.NewUserRepository,
 	)
 
+	MiddlewareSet = wire.NewSet(
+		middleware.NewMiddleware,
+	)
+
 	AllSet = wire.NewSet(
 		AppSet,
 		ControllerSet,
 		UseCaseSet,
 		RepositorySet,
+
+		MiddlewareSet,
 	)
 )
 
-func NewFiber(config *config.EnvConfigs) *fiber.App {
+func NewFiber(config *model.EnvConfigs) *fiber.App {
 	app := fiber.New(fiber.Config{
 		AppName: config.AppName,
 		ErrorHandler: NewErrorHandler(),

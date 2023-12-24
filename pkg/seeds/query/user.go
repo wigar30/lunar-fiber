@@ -1,13 +1,13 @@
 package query
 
 import (
-	"lunar-commerce-fiber/internal/app/config"
+	"lunar-commerce-fiber/internal/app/driver"
 	"lunar-commerce-fiber/internal/entity"
 
 	"gorm.io/gorm"
 )
 
-func UserSeed(db *config.Database) error {
+func UserSeed(db *driver.Database) error {
 	db.Transaction(func(tx *gorm.DB) error {
 		var count int64
 		db.Model(&entity.User{}).Where(`"roleId" = ?`, "1").Count(&count)

@@ -1,58 +1,45 @@
 package config
 
 import (
+	"fmt"
 	"log"
+	"lunar-commerce-fiber/internal/model"
 
 	"github.com/spf13/viper"
 )
 
-var Env *EnvConfigs
-
-type EnvConfigs struct {
-	AppName string
-	AppEnv  string
-	AppPort string
-
-	DbConnection string
-	DbHost       string
-	DbPort       string
-	DbDatabase   string
-	DbUsername   string
-	DbPassword   string
-
-	LogLever int32
-
-	JwtSecret    string
-	JwtExpiredIn string
-}
-
-func NewViper() *EnvConfigs {
+func NewViper() *model.EnvConfigs {
 	config := viper.New()
 
-	config.SetConfigName(".env")
-	config.SetConfigType("dotenv")
-	config.AddConfigPath("./")
+	config.AddConfigPath(".")
+	config.SetConfigType("env")
+	config.SetConfigFile(".env")
 	config.AutomaticEnv()
 
 	if err := config.ReadInConfig(); err != nil {
 		log.Fatal("Error reading env file", err)
 	}
 
-	return &EnvConfigs{
-		AppName: config.GetString("APP_NAME"),
-		AppEnv:  config.GetString("APP_ENV"),
-		AppPort: config.GetString("APP_PORT"),
+	config.BindEnv("AppName", "APP_NAME")
+	config.BindEnv("AppEnv", "APP_ENV")
+	config.BindEnv("AppPort", "APP_PORT")
 
-		DbConnection: config.GetString("DB_CONNECTION"),
-		DbHost:       config.GetString("DB_HOST"),
-		DbPort:       config.GetString("DB_PORT"),
-		DbDatabase:   config.GetString("DB_DATABASE"),
-		DbUsername:   config.GetString("DB_USERNAME"),
-		DbPassword:   config.GetString("DB_PASSWORD"),
+	config.BindEnv("DbConnection", "DB_CONNECTION")
+	config.BindEnv("DbHost", "DB_HOST")
+	config.BindEnv("DbPort", "DB_PORT")
+	config.BindEnv("DbDatabase", "DB_DATABASE")
+	config.BindEnv("DbUsername", "DB_USERNAME")
+	config.BindEnv("DbPassword", "DB_PASSWORD")
 
-		LogLever: config.GetInt32("LOG_LEVEL"),
+	config.BindEnv("LogLevel", "LOG_LEVEL")
 
-		JwtSecret:    config.GetString("AUTH_JWT_SECRET"),
-		JwtExpiredIn: config.GetString("AUTH_JWT_TOKEN_EXPIRES_IN"),
+	config.BindEnv("JwtExpiredIn", "AUTH_JWT_SECRET")
+	config.BindEnv("JwtSecret", "AUTH_JWT_TOKEN_EXPIRES_IN")
+
+	var env *model.EnvConfigs
+	if err := config.Unmarshal(&env); err != nil {
+		fmt.Printf("Error unmarshalling config: %s\n", err)
 	}
+
+	return env
 }
