@@ -65,6 +65,13 @@ func (f *HTTPService) ListenApp() error {
 
 	router.Route(f.app, f.ctrl, f.mdlwr)
 
+	f.app.Use(func(c *fiber.Ctx) error {
+		return model.OnError(c, &model.ErrorResponse{
+			Code:    fiber.StatusNotFound,
+			Message: "Nothing found",
+		})
+	})
+
 	f.log.Info("Application is running...")
 	port := f.config.AppPort
 	return f.app.Listen(fmt.Sprintf(":%s", port))
