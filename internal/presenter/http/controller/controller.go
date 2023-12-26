@@ -30,6 +30,6 @@ func NewController(
 func (ctrl *Controller) Ping(c *fiber.Ctx) error {
 
 	return model.OnSuccess(c, &model.PingResponse{
-		Ping: "pong",
+		Ping: "pong fiber",
 	})
 }

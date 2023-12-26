@@ -8,7 +8,12 @@ import (
 	"lunar-commerce-fiber/internal/presenter/http/router"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cache"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/helmet"
+	"github.com/gofiber/fiber/v2/middleware/limiter"
+	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/sirupsen/logrus"
 )
 
@@ -35,9 +40,28 @@ func NewListenApp(app *fiber.App, ctrl *controller.Controller, config *model.Env
 }
 
 func (f *HTTPService) ListenApp() error {
-	f.app.Use(cors.New(cors.Config{
-		AllowOrigins: "*",
-	}))
+	if f.config.AppEnv == "production" {
+		f.app.Use(
+			limiter.New(limiter.Config{
+				Max: 100,
+				LimitReached: func(c *fiber.Ctx) error {
+					return model.OnError(c, &model.ErrorResponse{
+						Code:    fiber.StatusTooManyRequests,
+						Message: "Too Many Requests",
+					})
+				},
+			}),
+		)
+	}
+	f.app.Use(
+		cors.New(cors.Config{
+			AllowOrigins: "*",
+		}),
+		logger.New(),
+		cache.New(),
+		helmet.New(),
+		recover.New(),
+	)
 
 	router.Route(f.app, f.ctrl, f.mdlwr)
 
