@@ -8,27 +8,27 @@ import (
 
 func main() {
 	envConfigs := config.NewViper()
-	logger := config.NewLogger(envConfigs)
-	db := driver.NewConnMySql(envConfigs, logger)
+	zaplog := config.NewLogger()
+	db := driver.NewConnMySql(envConfigs, zaplog)
 
 	var err error
 	err = query.RoleSeed(db)
 	if err != nil {
-		logger.Fatalf("error: failed to seed role data")
+		zaplog.Fatal("error: failed to seed role data")
 	}
 
 	err = query.StatusSeed(db)
 	if err != nil {
-		logger.Fatalf("error: failed to seed status data")
+		zaplog.Fatal("error: failed to seed status data")
 	}
 
 	err = query.UserSeed(db)
 	if err != nil {
-		logger.Fatalf("error: failed to seed user data")
+		zaplog.Fatal("error: failed to seed user data")
 	}
 
 	err = query.TenantSeed(db)
 	if err != nil {
-		logger.Fatalf("error: failed to seed user data")
+		zaplog.Fatal("error: failed to seed user data")
 	}
 }

@@ -8,13 +8,12 @@ import (
 	"lunar-commerce-fiber/internal/presenter/http/router"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cache"
+	// "github.com/gofiber/fiber/v2/middleware/cache"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/helmet"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
-	"github.com/sirupsen/logrus"
 )
 
 type HTTPServiceInterface interface {
@@ -25,11 +24,11 @@ type HTTPService struct {
 	app    *fiber.App
 	ctrl   *controller.Controller
 	config *model.EnvConfigs
-	log    *logrus.Logger
+	log    *model.Logger
 	mdlwr  *middleware.Middleware
 }
 
-func NewListenApp(app *fiber.App, ctrl *controller.Controller, config *model.EnvConfigs, log *logrus.Logger, mdlwr *middleware.Middleware) HTTPServiceInterface {
+func NewListenApp(app *fiber.App, ctrl *controller.Controller, config *model.EnvConfigs, log *model.Logger, mdlwr *middleware.Middleware) HTTPServiceInterface {
 	return &HTTPService{
 		app:    app,
 		ctrl:   ctrl,
@@ -58,7 +57,7 @@ func (f *HTTPService) ListenApp() error {
 			AllowOrigins: "*",
 		}),
 		logger.New(),
-		cache.New(),
+		// cache.New(),
 		helmet.New(),
 		recover.New(),
 	)

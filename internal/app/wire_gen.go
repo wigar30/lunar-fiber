@@ -26,7 +26,7 @@ import (
 func NewWire() config.HTTPServiceInterface {
 	envConfigs := config.NewViper()
 	app := NewFiber(envConfigs)
-	logger := config.NewLogger(envConfigs)
+	logger := config.NewLogger()
 	database := driver.NewConnMySql(envConfigs, logger)
 	roleRepositoryInterface := role.NewRoleRepository(database)
 	roleUseCaseInterface := role2.NewRoleUseCase(roleRepositoryInterface)

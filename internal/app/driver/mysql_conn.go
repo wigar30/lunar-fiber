@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/sirupsen/logrus"
+	"go.uber.org/zap/zapcore"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -17,7 +17,7 @@ type Database struct {
 	*gorm.DB
 }
 
-func NewConnMySql(config *model.EnvConfigs, logrus *logrus.Logger) *Database {
+func NewConnMySql(config *model.EnvConfigs, zaplog *model.Logger) *Database {
 	// conn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", viper.GetString("db.username"), viper.GetString("db.password"), viper.GetString("db.host"), viper.GetString("db.port"), viper.GetString("db.database"))
 	conn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", config.DbUsername, config.DbPassword, config.DbHost, config.DbPort, config.DbDatabase)
 
@@ -38,10 +38,12 @@ func NewConnMySql(config *model.EnvConfigs, logrus *logrus.Logger) *Database {
 	})
 
 	if err != nil {
-		logrus.Errorf("failed to connect database: %v", err)
+		zaplog.Error("failed to connect database: ", zapcore.Field{
+			String: err.Error(),
+		})
 	}
 
-	logrus.Info("Database connected")
+	zaplog.Info("Database connected")
 
 	return &Database{
 		DB: db,

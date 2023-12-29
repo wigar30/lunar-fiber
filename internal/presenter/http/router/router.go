@@ -5,6 +5,8 @@ import (
 	"lunar-commerce-fiber/internal/presenter/http/middleware"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cache"
+
 )
 
 func Route(f *fiber.App, ctrl *controller.Controller, m *middleware.Middleware) {
@@ -19,7 +21,7 @@ func Route(f *fiber.App, ctrl *controller.Controller, m *middleware.Middleware) 
 	user := v1.Group("user", m.AuthMiddleware.ValidateToken())
 	user.Get("/profile", ctrl.User.GetProfile)
 
-	role := v1.Group("role", m.AuthMiddleware.ValidateToken())
+	role := v1.Group("role", cache.New(), m.AuthMiddleware.ValidateToken())
 	role.Get("/", ctrl.Role.GetAll)
 	role.Get("/:id", ctrl.Role.GetByID)
 }
