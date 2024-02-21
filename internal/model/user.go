@@ -3,7 +3,7 @@ package model
 import "lunar-commerce-fiber/internal/entity"
 
 type UserResponse struct {
-	ID       string         `json:"id" gorm:"primaryKey;type:uuid;default:uuid_generate_v4()"`
+	ID       string         `json:"id" gorm:"primaryKey"`
 	Email    string         `json:"email,omitempty" gorm:"unique;not null"`
 	Name     string         `json:"name,omitempty"`
 	RoleID   string         `json:"roleId,omitempty" gorm:"not null;column:roleId"`
