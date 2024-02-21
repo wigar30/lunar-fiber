@@ -14,7 +14,7 @@ func (rr *RoleRepository) GetAll() ([]*entity.Role, error) {
 	err := rr.db.Find(&roles).Error
 	if err != nil {
 		return nil, &model.ErrorResponse{
-			Code: fiber.StatusInternalServerError,
+			Code:    fiber.StatusInternalServerError,
 			Message: err.Error(),
 		}
 	}
@@ -27,13 +27,13 @@ func (rr *RoleRepository) GetByID(RoleId int64) (*entity.Role, error) {
 	err := rr.db.First(&role, RoleId).Error
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, &model.ErrorResponse{
-			Code: fiber.StatusNotFound,
+			Code:    fiber.StatusNotFound,
 			Message: err.Error(),
 		}
 	}
 	if err != nil {
 		return nil, &model.ErrorResponse{
-			Code: fiber.StatusInternalServerError,
+			Code:    fiber.StatusInternalServerError,
 			Message: err.Error(),
 		}
 	}

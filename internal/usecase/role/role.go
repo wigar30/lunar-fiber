@@ -10,7 +10,7 @@ func (ru RoleUseCase) GetAll(c *fiber.Ctx) (*model.RolesResponse, error) {
 	roles, err := ru.roleRepo.GetAll()
 	if err != nil {
 		return nil, &model.ErrorResponse{
-			Code: fiber.StatusInternalServerError,
+			Code:    fiber.StatusInternalServerError,
 			Message: err.Error(),
 		}
 	}
@@ -34,13 +34,13 @@ func (ru RoleUseCase) GetByID(roleId int64) (*model.RoleResponse, error) {
 	role, err := ru.roleRepo.GetByID(roleId)
 	if errC, ok := err.(*model.ErrorResponse); ok {
 		return nil, &model.ErrorResponse{
-			Code: errC.Code,
+			Code:    errC.Code,
 			Message: errC.Error(),
 		}
 	}
 
 	return &model.RoleResponse{
-		ID: role.ID,
+		ID:   role.ID,
 		Name: role.Name,
 	}, nil
 }
