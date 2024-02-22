@@ -47,8 +47,10 @@ func (tc TenantController) GetAllByAuth(c *fiber.Ctx) error {
 }
 
 func (tc TenantController) GetByID(c *fiber.Ctx) error {
+	claims, _ := c.Locals("claims").(*model.JwtClaims)
 	paramsId := c.Params("id")
-	resp, err := tc.tenantUseCase.GetByID(paramsId)
+
+	resp, err := tc.tenantUseCase.GetByID(claims.ID, paramsId)
 	if err, errC := err.(*model.ErrorResponse); errC {
 		return model.OnError(c, &model.ErrorResponse{
 			Code:    err.Code,

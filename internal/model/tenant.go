@@ -16,10 +16,10 @@ type TenantResponse struct {
 
 type TenantRepositoryInterface interface {
 	GetAllByAuth(int64, utils.Pagination) (*utils.Pagination, error)
-	GetByID(string) (*entity.Tenant, error)
+	GetByID(string, string) (*entity.Tenant, error)
 }
 
 type TenantUseCaseInterface interface {
 	GetAllByAuth(int64, PaginationRequest) (*utils.Pagination, error)
-	GetByID(string) (*TenantResponse, error)
+	GetByID(string, string) (*TenantResponse, error)
 }

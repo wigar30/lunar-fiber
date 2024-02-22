@@ -36,10 +36,25 @@ func (tr *TenantRepository) GetAllByAuth(userId int64, p utils.Pagination) (*uti
 	return &p, nil
 }
 
-func (tr *TenantRepository) GetByID(ID string) (*entity.Tenant, error) {
+func (tr *TenantRepository) GetByID(userId string, ID string) (*entity.Tenant, error) {
 	var tenant *entity.Tenant
+	var member *entity.Membership
 
-	err := tr.db.
+	err := tr.db.Table("memberships").Select("id").Where(&entity.Membership{UserID: userId, TenantID: ID}).First(&member).Error
+	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, &model.ErrorResponse{
+			Code:    fiber.StatusNotFound,
+			Message: err.Error(),
+		}
+	}
+	if err != nil {
+		return nil, &model.ErrorResponse{
+			Code:    fiber.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+
+	err = tr.db.
 		Joins("LevelTenant").
 		Preload("Memberships", func(db *gorm.DB) *gorm.DB {
 			return db.

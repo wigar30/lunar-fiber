@@ -20,8 +20,8 @@ func (tu *TenantUseCase) GetAllByAuth(userId int64, p model.PaginationRequest) (
 	return tenants, nil
 }
 
-func (tu *TenantUseCase) GetByID(ID string) (*model.TenantResponse, error) {
-	tenant, err := tu.tenantRepo.GetByID(ID)
+func (tu *TenantUseCase) GetByID(userId string, ID string) (*model.TenantResponse, error) {
+	tenant, err := tu.tenantRepo.GetByID(userId, ID)
 	if errC, ok := err.(*model.ErrorResponse); ok {
 		return nil, &model.ErrorResponse{
 			Code:    errC.Code,
