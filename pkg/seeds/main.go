@@ -27,6 +27,11 @@ func main() {
 		zaplog.Fatal("error: failed to seed user data")
 	}
 
+	err = query.LevelTenantSeed(db)
+	if err != nil {
+		zaplog.Fatal("error: failed to seed user data")
+	}
+
 	err = query.TenantSeed(db)
 	if err != nil {
 		zaplog.Fatal("error: failed to seed user data")

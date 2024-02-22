@@ -17,6 +17,7 @@ func TenantSeed(db *driver.Database) error {
 			tenant := entity.Tenant{
 				Name: "Tenant User",
 				TotalProduct: new(int),
+				LevelID: "1",
 			}
 			tx.Create(&tenant)
 
