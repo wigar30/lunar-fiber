@@ -14,8 +14,14 @@ type ErrorResponse struct {
 	Message string `json:"message"`
 	Detail  string `json:"details,omitempty"`
 }
+
 func (e ErrorResponse) Error() string {
 	return e.Message
+}
+
+type PaginationRequest struct {
+	Page  int `json:"page"`
+	Limit int `json:"limit"`
 }
 
 type PageMetadata struct {
@@ -28,7 +34,7 @@ type PageMetadata struct {
 func OnSuccess(c *fiber.Ctx, data interface{}) error {
 	resp := ApiResponse{
 		Status: "OK",
-		Data: data,
+		Data:   data,
 	}
 
 	return c.JSON(resp)

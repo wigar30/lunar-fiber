@@ -8,12 +8,15 @@ import (
 	authCtrl "lunar-commerce-fiber/internal/presenter/http/controller/auth"
 	roleCtrl "lunar-commerce-fiber/internal/presenter/http/controller/role"
 	userCtrl "lunar-commerce-fiber/internal/presenter/http/controller/user"
+	tenantCtrl "lunar-commerce-fiber/internal/presenter/http/controller/tenant"
 	"lunar-commerce-fiber/internal/presenter/http/middleware"
 	roleRepo "lunar-commerce-fiber/internal/repository/role"
 	userRepo "lunar-commerce-fiber/internal/repository/user"
+	tenantRepo "lunar-commerce-fiber/internal/repository/tenant"
 	authUC "lunar-commerce-fiber/internal/usecase/auth"
 	roleUC "lunar-commerce-fiber/internal/usecase/role"
 	userUC "lunar-commerce-fiber/internal/usecase/user"
+	tenantUC "lunar-commerce-fiber/internal/usecase/tenant"
 
 	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
@@ -34,17 +37,20 @@ var (
 		roleCtrl.NewRoleController,
 		authCtrl.NewAuthController,
 		userCtrl.NewUserController,
+		tenantCtrl.NewTenantController,
 	)
 
 	UseCaseSet = wire.NewSet(
 		roleUC.NewRoleUseCase,
 		authUC.NewAuthUseCase,
 		userUC.NewUserUseCase,
+		tenantUC.NewTenantUseCase,
 	)
 
 	RepositorySet = wire.NewSet(
 		roleRepo.NewRoleRepository,
 		userRepo.NewUserRepository,
+		tenantRepo.NewTenantRepository,
 	)
 
 	MiddlewareSet = wire.NewSet(

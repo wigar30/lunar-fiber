@@ -24,4 +24,7 @@ func Route(f *fiber.App, ctrl *controller.Controller, m *middleware.Middleware) 
 	role := v1.Group("role", cache.New(), m.AuthMiddleware.ValidateToken())
 	role.Get("/", ctrl.Role.GetAll)
 	role.Get("/:id", ctrl.Role.GetByID)
+
+	tenant := v1.Group("tenant", cache.New(), m.AuthMiddleware.ValidateToken())
+	tenant.Get("/auth", ctrl.Tenant.GetAllByAuth)
 }

@@ -9,7 +9,7 @@ type TenantRepository struct {
 	db *driver.Database
 }
 
-func NewTenantRepository(db *driver.Database) model.UserRepositoryInterface {
+func NewTenantRepository(db *driver.Database) model.TenantRepositoryInterface {
 	return &TenantRepository{
 		db: db,
 	}
