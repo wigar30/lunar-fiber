@@ -28,8 +28,8 @@ func TenantSeed(db *driver.Database) error {
 			}
 	
 			tx.Create(&entity.Membership{
-				UserRefer: user.ID,
-				TenantRefer: tenant.ID,
+				UserID: user.ID,
+				TenantID: tenant.ID,
 				RoleID: user.RoleID,
 				StatusID: user.StatusID,
 			})

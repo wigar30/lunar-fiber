@@ -19,7 +19,7 @@ type User struct {
 	StatusID      string       `json:"statusId,omitempty" gorm:"not null;column:statusId"`
 	Status        *Status      `json:"status,omitempty" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:StatusID"`
 	Hash          string       `json:"hash,omitempty"`
-	Memberships   []Membership `json:"membership,omitempty" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:UserRefer"`
+	Memberships   []Membership `json:"membership,omitempty" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:UserID"`
 	DefaultColumn `gorm:"embedded"`
 }
 

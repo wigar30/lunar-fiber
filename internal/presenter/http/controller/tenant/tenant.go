@@ -45,3 +45,16 @@ func (tc TenantController) GetAllByAuth(c *fiber.Ctx) error {
 
 	return model.OnSuccess(c, resp)
 }
+
+func (tc TenantController) GetByID(c *fiber.Ctx) error {
+	paramsId := c.Params("id")
+	resp, err := tc.tenantUseCase.GetByID(paramsId)
+	if err, errC := err.(*model.ErrorResponse); errC {
+		return model.OnError(c, &model.ErrorResponse{
+			Code:    err.Code,
+			Message: err.Error(),
+		})
+	}
+
+	return model.OnSuccess(c, resp)
+}
