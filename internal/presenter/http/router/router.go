@@ -21,10 +21,10 @@ func Route(f *fiber.App, ctrl *controller.Controller, m *middleware.Middleware) 
 	user.Get("/profile", ctrl.User.GetProfile)
 
 	role := v1.Group("role", cache.New(), m.AuthMiddleware.ValidateToken())
-	role.Get("/", ctrl.Role.GetAll)
-	role.Get("/:id", ctrl.Role.GetByID)
+	role.Get("/", m.RbacMiddleware.ValidateRoleUser([]string{"All"}), ctrl.Role.GetAll)
+	role.Get("/:id", m.RbacMiddleware.ValidateRoleUser([]string{"All"}), ctrl.Role.GetByID)
 
-	tenant := v1.Group("tenant", cache.New(), m.AuthMiddleware.ValidateToken())
+	tenant := v1.Group("tenant", m.AuthMiddleware.ValidateToken())
 	tenant.Get("/auth", ctrl.Tenant.GetAllByAuth)
 	tenant.Get("/:id", ctrl.Tenant.GetByID)
 }

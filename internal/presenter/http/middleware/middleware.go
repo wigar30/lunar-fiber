@@ -6,10 +6,12 @@ import (
 
 type Middleware struct {
 	AuthMiddleware *AuthMiddleware
+	RbacMiddleware *RbacMiddleware
 }
 
-func NewMiddleware(userRepo model.UserRepositoryInterface, config *model.EnvConfigs) *Middleware {
+func NewMiddleware(userRepo model.UserRepositoryInterface, roleRepo model.RoleRepositoryInterface, config *model.EnvConfigs) *Middleware {
 	return &Middleware{
 		AuthMiddleware: NewAuthMiddleware(userRepo, config),
+		RbacMiddleware: NewRbacMiddleware(roleRepo, config),
 	}
 }

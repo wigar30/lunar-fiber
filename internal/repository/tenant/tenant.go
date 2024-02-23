@@ -15,6 +15,7 @@ func (tr *TenantRepository) GetAllByAuth(userId int64, p utils.Pagination) (*uti
 
 	err := tr.db.
 		Joins("LevelTenant").
+		Joins("SummaryStat").
 		Where("EXISTS(?)", tr.db.Table("memberships").Select("1").Where("tenants.id = memberships.tenantId AND userId = ?", userId)).
 		Scopes(utils.Paginate(&p, tr.db.Where("EXISTS(?)", tr.db.Table("memberships").Select("1").Where("tenants.id = memberships.tenantId AND userId = ?", userId)), &tenants)).
 		Find(&tenants).Error

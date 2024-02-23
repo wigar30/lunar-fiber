@@ -43,7 +43,7 @@ func NewWire() config.HTTPServiceInterface {
 	tenantUseCaseInterface := tenant2.NewTenantUseCase(tenantRepositoryInterface)
 	tenantController := tenant3.NewTenantController(tenantUseCaseInterface)
 	controllerController := controller.NewController(roleController, authController, userController, tenantController)
-	middlewareMiddleware := middleware.NewMiddleware(userRepositoryInterface, envConfigs)
+	middlewareMiddleware := middleware.NewMiddleware(userRepositoryInterface, roleRepositoryInterface, envConfigs)
 	httpServiceInterface := config.NewListenApp(app, controllerController, envConfigs, logger, middlewareMiddleware)
 	return httpServiceInterface
 }

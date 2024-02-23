@@ -1,0 +1,5 @@
+START TRANSACTION;
+
+DROP TABLE IF EXISTS summary_stats;
+
+COMMIT;

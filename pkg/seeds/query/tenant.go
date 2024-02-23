@@ -21,6 +21,15 @@ func TenantSeed(db *driver.Database) error {
 			}
 			tx.Create(&tenant)
 
+			tx.Create(&entity.SummaryStat{
+				TenantID: tenant.ID,
+				UnprocessedOrder: 0,
+				CompletedOrder: 0,
+				OrderBeingSent: 0,
+				UnfinishedComplain: 0,
+				TotalComplain: 0,
+			})
+
 			var user entity.User
 			err := db.Model(&user).Where("name = ?", "User Local").First(&user).Error
 			if err != nil {
@@ -30,11 +39,76 @@ func TenantSeed(db *driver.Database) error {
 			tx.Create(&entity.Membership{
 				UserID: user.ID,
 				TenantID: tenant.ID,
-				RoleID: user.RoleID,
+				RoleID: "3",
 				StatusID: user.StatusID,
 			})
 		}
 
+		db.Model(&tenant).Where("name = ?", "Tenant User 2").Count(&count)
+
+		if count == 0 {
+			tenant := entity.Tenant{
+				Name: "Tenant User 2",
+				TotalProduct: new(int),
+				LevelID: "2",
+			}
+			tx.Create(&tenant)
+
+			tx.Create(&entity.SummaryStat{
+				TenantID: tenant.ID,
+				UnprocessedOrder: 0,
+				CompletedOrder: 0,
+				OrderBeingSent: 0,
+				UnfinishedComplain: 0,
+				TotalComplain: 0,
+			})
+
+			var user entity.User
+			err := db.Model(&user).Where("name = ?", "User Local").First(&user).Error
+			if err != nil {
+				return err
+			}
+	
+			tx.Create(&entity.Membership{
+				UserID: user.ID,
+				TenantID: tenant.ID,
+				RoleID: "3",
+				StatusID: user.StatusID,
+			})
+		}
+
+		db.Model(&tenant).Where("name = ?", "Tenant Admin").Count(&count)
+
+		if count == 0 {
+			tenant := entity.Tenant{
+				Name: "Tenant Admin",
+				TotalProduct: new(int),
+				LevelID: "3",
+			}
+			tx.Create(&tenant)
+
+			tx.Create(&entity.SummaryStat{
+				TenantID: tenant.ID,
+				UnprocessedOrder: 0,
+				CompletedOrder: 0,
+				OrderBeingSent: 0,
+				UnfinishedComplain: 0,
+				TotalComplain: 0,
+			})
+
+			var user entity.User
+			err := db.Model(&user).Where("name = ?", "Admin Local").First(&user).Error
+			if err != nil {
+				return err
+			}
+	
+			tx.Create(&entity.Membership{
+				UserID: user.ID,
+				TenantID: tenant.ID,
+				RoleID: "3",
+				StatusID: user.StatusID,
+			})
+		}
 
 		return nil
 	})
