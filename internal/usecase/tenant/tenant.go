@@ -32,9 +32,10 @@ func (tu *TenantUseCase) GetByID(userId string, ID string) (*model.TenantRespons
 	return &model.TenantResponse{
 		ID: tenant.ID,
 		Name: tenant.Name,
-		TotalProduct: int64(*tenant.TotalProduct),
+		TotalProduct: int64(tenant.TotalProduct),
 		LevelID: tenant.LevelID,
 		Level: &tenant.LevelTenant,
 		Memberships: tenant.Memberships,
+		SummaryStat: tenant.SummaryStat,
 	}, nil
 }

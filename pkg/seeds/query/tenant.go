@@ -16,7 +16,7 @@ func TenantSeed(db *driver.Database) error {
 		if count == 0 {
 			tenant := entity.Tenant{
 				Name: "Tenant User",
-				TotalProduct: new(int),
+				TotalProduct: 0,
 				LevelID: "1",
 			}
 			tx.Create(&tenant)
@@ -49,7 +49,7 @@ func TenantSeed(db *driver.Database) error {
 		if count == 0 {
 			tenant := entity.Tenant{
 				Name: "Tenant User 2",
-				TotalProduct: new(int),
+				TotalProduct: 0,
 				LevelID: "2",
 			}
 			tx.Create(&tenant)
@@ -82,7 +82,7 @@ func TenantSeed(db *driver.Database) error {
 		if count == 0 {
 			tenant := entity.Tenant{
 				Name: "Tenant Admin",
-				TotalProduct: new(int),
+				TotalProduct: 0,
 				LevelID: "3",
 			}
 			tx.Create(&tenant)

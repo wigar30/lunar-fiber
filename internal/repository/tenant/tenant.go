@@ -57,6 +57,7 @@ func (tr *TenantRepository) GetByID(userId string, ID string) (*entity.Tenant, e
 
 	err = tr.db.
 		Joins("LevelTenant").
+		Joins("SummaryStat").
 		Preload("Memberships", func(db *gorm.DB) *gorm.DB {
 			return db.
 				Select("memberships.id, memberships.userId, memberships.roleId, memberships.tenantId").

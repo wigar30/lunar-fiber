@@ -11,6 +11,7 @@ type TenantResponse struct {
 	TotalProduct int64               `json:"total_product"`
 	LevelID      string              `json:"levelId"`
 	Level        *entity.LevelTenant `json:"level,omitempty" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:LevelID"`
+	SummaryStat  *entity.SummaryStat `json:"summaryStat" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:TenantID"`
 	Memberships  []entity.Membership `json:"memberships" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:TenantID"`
 }
 

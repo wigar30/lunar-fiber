@@ -10,7 +10,7 @@ type Membership struct {
 	User          *User   `json:"user,omitempty" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:UserID"`
 	RoleID        string  `json:"roleId,omitempty" gorm:"not null;column:roleId"`
 	Role          *Role   `json:"role,omitempty" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:RoleID"`
-	TenantID      string  `json:"-" gorm:"not null;type:uuid;column:tenantId"`
+	TenantID      string  `json:"-" gorm:"not null;column:tenantId"`
 	Tenant        *Tenant `json:"tenant,omitempty" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:TenantID"`
 	StatusID      string  `json:"-" gorm:"not null;column:statusId"`
 	Status        *Status `json:"status,omitempty" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:StatusID"`
