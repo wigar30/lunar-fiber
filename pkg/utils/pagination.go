@@ -9,6 +9,7 @@ import (
 type Pagination struct {
 	Items       interface{} `json:"items"`
 	Limit       int         `json:"limit,omitempty"`
+	Search      string      `json:"-"`
 	Page        int         `json:"page,omitempty"`
 	Sort        string      `json:"sort,omitempty"`
 	TotalData   int64       `json:"totalData"`

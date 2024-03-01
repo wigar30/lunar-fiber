@@ -2,7 +2,7 @@ package entity
 
 import "gorm.io/gorm"
 
-func (s *Product) TableName() string {
+func (Product) TableName() string {
 	return "products"
 }
 
@@ -21,11 +21,16 @@ type Product struct {
 
 func (p *Product) AfterCreate(tx *gorm.DB) (err error) {
 	var tenant Tenant
-	err = tx.Select("id", "total_product").First(&tenant, p.TenantID).Error
+	err = tx.Select("id", "totalProduct").First(&tenant, p.TenantID).Error
 	if err != nil {
+		tx.Rollback()
 		return err
 	}
-	tx.Table("Tenant").Where("id", p.TenantID).Update("total_product", tenant.TotalProduct + 1)
+	err = tx.Model(&tenant).Where("id", p.TenantID).Update("totalProduct", tenant.TotalProduct+1).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
 
 	return
 }

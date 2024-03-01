@@ -20,8 +20,9 @@ func (e ErrorResponse) Error() string {
 }
 
 type PaginationRequest struct {
-	Page  int `json:"page"`
-	Limit int `json:"limit"`
+	Page   int    `json:"page"`
+	Limit  int    `json:"limit"`
+	Search string `json:"search"`
 }
 
 type PageMetadata struct {

@@ -11,14 +11,17 @@ import (
 	"lunar-commerce-fiber/internal/app/driver"
 	"lunar-commerce-fiber/internal/presenter/http/controller"
 	auth2 "lunar-commerce-fiber/internal/presenter/http/controller/auth"
+	product3 "lunar-commerce-fiber/internal/presenter/http/controller/product"
 	role3 "lunar-commerce-fiber/internal/presenter/http/controller/role"
 	tenant3 "lunar-commerce-fiber/internal/presenter/http/controller/tenant"
 	user3 "lunar-commerce-fiber/internal/presenter/http/controller/user"
 	"lunar-commerce-fiber/internal/presenter/http/middleware"
+	"lunar-commerce-fiber/internal/repository/product"
 	"lunar-commerce-fiber/internal/repository/role"
 	"lunar-commerce-fiber/internal/repository/tenant"
 	"lunar-commerce-fiber/internal/repository/user"
 	"lunar-commerce-fiber/internal/usecase/auth"
+	product2 "lunar-commerce-fiber/internal/usecase/product"
 	role2 "lunar-commerce-fiber/internal/usecase/role"
 	tenant2 "lunar-commerce-fiber/internal/usecase/tenant"
 	user2 "lunar-commerce-fiber/internal/usecase/user"
@@ -42,7 +45,11 @@ func NewWire() config.HTTPServiceInterface {
 	tenantRepositoryInterface := tenant.NewTenantRepository(database)
 	tenantUseCaseInterface := tenant2.NewTenantUseCase(tenantRepositoryInterface)
 	tenantController := tenant3.NewTenantController(tenantUseCaseInterface)
-	controllerController := controller.NewController(roleController, authController, userController, tenantController)
+	productRepositoryInterface := product.NewProductRepository(database)
+	productUseCaseInterface := product2.NewProductUseCase(productRepositoryInterface)
+	validate := config.NewValidator()
+	productController := product3.NewProductController(productUseCaseInterface, validate)
+	controllerController := controller.NewController(roleController, authController, userController, tenantController, productController)
 	middlewareMiddleware := middleware.NewMiddleware(userRepositoryInterface, roleRepositoryInterface, envConfigs)
 	httpServiceInterface := config.NewListenApp(app, controllerController, envConfigs, logger, middlewareMiddleware)
 	return httpServiceInterface

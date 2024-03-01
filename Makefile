@@ -10,6 +10,9 @@ migrate-fresh:
 migrate-seed:
 	go run ./pkg/seeds/main.go
 
+wire-module:
+	go get github.com/google/wire/cmd/wire
+
 wire:
 	cd internal/app && go generate
 

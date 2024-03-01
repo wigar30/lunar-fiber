@@ -9,14 +9,17 @@ import (
 	roleCtrl "lunar-commerce-fiber/internal/presenter/http/controller/role"
 	userCtrl "lunar-commerce-fiber/internal/presenter/http/controller/user"
 	tenantCtrl "lunar-commerce-fiber/internal/presenter/http/controller/tenant"
+	productCtrl "lunar-commerce-fiber/internal/presenter/http/controller/product"
 	"lunar-commerce-fiber/internal/presenter/http/middleware"
 	roleRepo "lunar-commerce-fiber/internal/repository/role"
 	userRepo "lunar-commerce-fiber/internal/repository/user"
 	tenantRepo "lunar-commerce-fiber/internal/repository/tenant"
+	productRepo "lunar-commerce-fiber/internal/repository/product"
 	authUC "lunar-commerce-fiber/internal/usecase/auth"
 	roleUC "lunar-commerce-fiber/internal/usecase/role"
 	userUC "lunar-commerce-fiber/internal/usecase/user"
 	tenantUC "lunar-commerce-fiber/internal/usecase/tenant"
+	productUC "lunar-commerce-fiber/internal/usecase/product"
 
 	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
@@ -27,6 +30,7 @@ var (
 	AppSet = wire.NewSet(
 		config.NewViper,
 		config.NewLogger,
+		config.NewValidator,
 		config.NewListenApp,
 		driver.NewConnMySql,
 		NewFiber,
@@ -38,6 +42,7 @@ var (
 		authCtrl.NewAuthController,
 		userCtrl.NewUserController,
 		tenantCtrl.NewTenantController,
+		productCtrl.NewProductController,
 	)
 
 	UseCaseSet = wire.NewSet(
@@ -45,12 +50,14 @@ var (
 		authUC.NewAuthUseCase,
 		userUC.NewUserUseCase,
 		tenantUC.NewTenantUseCase,
+		productUC.NewProductUseCase,
 	)
 
 	RepositorySet = wire.NewSet(
 		roleRepo.NewRoleRepository,
 		userRepo.NewUserRepository,
 		tenantRepo.NewTenantRepository,
+		productRepo.NewProductRepository,
 	)
 
 	MiddlewareSet = wire.NewSet(
@@ -72,6 +79,7 @@ func NewFiber(config *model.EnvConfigs) *fiber.App {
 		AppName: config.AppName,
 		ErrorHandler: NewErrorHandler(),
 		Prefork: config.AppEnv == "production",
+		Immutable: true,
 
 		JSONEncoder: json.Marshal,
 		JSONDecoder: json.Unmarshal,

@@ -3,6 +3,7 @@ package controller
 import (
 	"lunar-commerce-fiber/internal/model"
 	"lunar-commerce-fiber/internal/presenter/http/controller/auth"
+	"lunar-commerce-fiber/internal/presenter/http/controller/product"
 	"lunar-commerce-fiber/internal/presenter/http/controller/role"
 	"lunar-commerce-fiber/internal/presenter/http/controller/tenant"
 	"lunar-commerce-fiber/internal/presenter/http/controller/user"
@@ -15,6 +16,7 @@ type Controller struct {
 	Auth   *auth.AuthController
 	User   *user.UserController
 	Tenant *tenant.TenantController
+	Product *product.ProductController
 }
 
 func NewController(
@@ -22,12 +24,14 @@ func NewController(
 	AuthController *auth.AuthController,
 	UserController *user.UserController,
 	TenantController *tenant.TenantController,
+	ProductController *product.ProductController,
 ) *Controller {
 	return &Controller{
 		Role:   RoleController,
 		Auth:   AuthController,
 		User:   UserController,
 		Tenant: TenantController,
+		Product: ProductController,
 	}
 }
 
