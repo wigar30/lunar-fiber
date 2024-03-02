@@ -16,6 +16,7 @@ import (
 	tenant3 "lunar-commerce-fiber/internal/presenter/http/controller/tenant"
 	user3 "lunar-commerce-fiber/internal/presenter/http/controller/user"
 	"lunar-commerce-fiber/internal/presenter/http/middleware"
+	"lunar-commerce-fiber/internal/repository/membership"
 	"lunar-commerce-fiber/internal/repository/product"
 	"lunar-commerce-fiber/internal/repository/role"
 	"lunar-commerce-fiber/internal/repository/tenant"
@@ -43,11 +44,12 @@ func NewWire() config.HTTPServiceInterface {
 	userUseCaseInterface := user2.NewUserUseCase(userRepositoryInterface)
 	userController := user3.NewUserController(userUseCaseInterface)
 	tenantRepositoryInterface := tenant.NewTenantRepository(database)
-	tenantUseCaseInterface := tenant2.NewTenantUseCase(tenantRepositoryInterface)
-	tenantController := tenant3.NewTenantController(tenantUseCaseInterface)
+	membershipRepositoryInterface := membership.NewMembershipRepository(database)
+	tenantUseCaseInterface := tenant2.NewTenantUseCase(tenantRepositoryInterface, membershipRepositoryInterface)
+	validate := config.NewValidator()
+	tenantController := tenant3.NewTenantController(tenantUseCaseInterface, validate)
 	productRepositoryInterface := product.NewProductRepository(database)
 	productUseCaseInterface := product2.NewProductUseCase(productRepositoryInterface)
-	validate := config.NewValidator()
 	productController := product3.NewProductController(productUseCaseInterface, validate)
 	controllerController := controller.NewController(roleController, authController, userController, tenantController, productController)
 	middlewareMiddleware := middleware.NewMiddleware(userRepositoryInterface, roleRepositoryInterface, envConfigs)

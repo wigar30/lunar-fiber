@@ -22,7 +22,9 @@ func (pu *ProductUseCase) GetAllByTenantID(tenantID string, p model.PaginationRe
 }
 
 func(pu *ProductUseCase) CreateProduct(product model.CreateProduct) (string, error) {
-	ID, err := pu.productRepo.CreateProduct(model.CreateProduct{
+	tx := pu.productRepo.BeginTransaction()
+
+	ID, err := pu.productRepo.CreateProduct(tx, model.CreateProduct{
 		TenantID: product.TenantID,
 		Name: product.Name,
 		TotalStock: product.TotalStock,

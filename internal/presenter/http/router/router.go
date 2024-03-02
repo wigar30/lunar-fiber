@@ -25,6 +25,7 @@ func Route(f *fiber.App, ctrl *controller.Controller, m *middleware.Middleware) 
 	role.Get("/:id", m.RbacMiddleware.ValidateRoleUser([]string{"All"}), ctrl.Role.GetByID)
 
 	tenant := v1.Group("tenant", m.AuthMiddleware.ValidateToken())
+	tenant.Post("/", ctrl.Tenant.CreateTenant)
 	tenant.Get("/auth", ctrl.Tenant.GetAllByAuth)
 	tenant.Get("/:id", ctrl.Tenant.GetByID)
 	tenant.Get("/:id/product", ctrl.Product.GetAllByTenantID)

@@ -10,6 +10,18 @@ import (
 	"gorm.io/gorm"
 )
 
+func (tr *TenantRepository) BeginTransaction() *gorm.DB {
+	return tr.db.Begin()
+}
+
+func (tr *TenantRepository) CommitTransaction(tx *gorm.DB) error {
+	return tx.Commit().Error
+}
+
+func (tr *TenantRepository) RollbackTransaction(tx *gorm.DB) error {
+	return tx.Rollback().Error
+}
+
 func (tr *TenantRepository) GetAllByAuth(userId int64, p utils.Pagination) (*utils.Pagination, error) {
 	var tenants []*entity.Tenant
 
@@ -35,6 +47,24 @@ func (tr *TenantRepository) GetAllByAuth(userId int64, p utils.Pagination) (*uti
 	p.Items = tenants
 
 	return &p, nil
+}
+
+func (tr *TenantRepository) GetCountAuthTenant(userId int64) (int64, error) {
+	var tenantCount int64
+	var tenant entity.Tenant
+	err := tr.db.
+		Model(&tenant).
+		Where("EXISTS(?)", tr.db.Table("memberships").Select("1").Where("tenants.id = memberships.tenantId AND userId = ?", userId)).
+		Count(&tenantCount).
+		Error
+	if err != nil {
+		return 0, &model.ErrorResponse{
+			Code:    fiber.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+
+	return tenantCount, nil
 }
 
 func (tr *TenantRepository) GetByID(userId string, ID string) (*entity.Tenant, error) {
@@ -79,4 +109,21 @@ func (tr *TenantRepository) GetByID(userId string, ID string) (*entity.Tenant, e
 	}
 
 	return tenant, nil
+}
+
+func (tr *TenantRepository) CreateTenant(tx *gorm.DB, tenant model.CreateTenant) (string, error) {
+	tenantResult := &entity.Tenant{
+		Name: tenant.Name,
+		LevelID: "1",
+	}
+
+	err := tx.Create(&tenantResult).Error
+	if err != nil {
+		return "", &model.ErrorResponse{
+			Code:    fiber.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+
+	return tenantResult.ID, nil
 }

@@ -15,6 +15,7 @@ import (
 	userRepo "lunar-commerce-fiber/internal/repository/user"
 	tenantRepo "lunar-commerce-fiber/internal/repository/tenant"
 	productRepo "lunar-commerce-fiber/internal/repository/product"
+	membershipRepo "lunar-commerce-fiber/internal/repository/membership"
 	authUC "lunar-commerce-fiber/internal/usecase/auth"
 	roleUC "lunar-commerce-fiber/internal/usecase/role"
 	userUC "lunar-commerce-fiber/internal/usecase/user"
@@ -58,6 +59,7 @@ var (
 		userRepo.NewUserRepository,
 		tenantRepo.NewTenantRepository,
 		productRepo.NewProductRepository,
+		membershipRepo.NewMembershipRepository,
 	)
 
 	MiddlewareSet = wire.NewSet(

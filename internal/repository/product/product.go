@@ -10,6 +10,18 @@ import (
 	"gorm.io/gorm"
 )
 
+func (pr *ProductRepository) BeginTransaction() *gorm.DB {
+	return pr.db.Begin()
+}
+
+func (pr *ProductRepository) CommitTransaction(tx *gorm.DB) error {
+	return tx.Commit().Error
+}
+
+func (pr *ProductRepository) RollbackTransaction(tx *gorm.DB) error {
+	return tx.Rollback().Error
+}
+
 func (pr *ProductRepository) GetAllByTenantID(tenantID string, p utils.Pagination) (*utils.Pagination, error) {
 	var products []entity.Product
 
@@ -43,7 +55,7 @@ func (pr *ProductRepository) GetAllByTenantID(tenantID string, p utils.Paginatio
 	return &p, nil
 }
 
-func (pr *ProductRepository) CreateProduct(product model.CreateProduct) (string, error) {
+func (pr *ProductRepository) CreateProduct(tx *gorm.DB, product model.CreateProduct) (string, error) {
 	productResult := &entity.Product{
 		TenantID: product.TenantID,
 		Name: product.Name,
@@ -52,7 +64,7 @@ func (pr *ProductRepository) CreateProduct(product model.CreateProduct) (string,
 		Specification: product.Specification,
 		Price: product.Price,
 	}
-	err := pr.db.Create(&productResult).Error
+	err := tx.Create(&productResult).Error
 	if err != nil {
 		return "", &model.ErrorResponse{
 			Code:    fiber.StatusInternalServerError,
