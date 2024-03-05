@@ -39,5 +39,5 @@ func(pu *ProductUseCase) CreateProduct(product model.CreateProduct) (string, err
 		}
 	}
 
-	return ID, nil
+	return ID, pu.productRepo.CommitTransaction(tx)
 }
