@@ -29,6 +29,7 @@ func Route(f *fiber.App, ctrl *controller.Controller, m *middleware.Middleware) 
 	tenant.Get("/auth", ctrl.Tenant.GetAllByAuth)
 	tenant.Get("/:id", ctrl.Tenant.GetByID)
 	tenant.Get("/:id/product", ctrl.Product.GetAllByTenantID)
+	tenant.Get("/:id/product/:productId", ctrl.Product.GetByID)
 
 	product := v1.Group("product", m.AuthMiddleware.ValidateToken())
 	product.Post("/", ctrl.Product.CreateProduct)

@@ -1,6 +1,7 @@
 package model
 
 import (
+	"lunar-commerce-fiber/internal/entity"
 	"lunar-commerce-fiber/pkg/utils"
 
 	"gorm.io/gorm"
@@ -13,18 +14,31 @@ type CreateProduct struct {
 	Price         *int   `json:"price,omitempty" gorm:"not null;column:price;default:0" validate:"required,numeric"`
 	Description   string `json:"description,omitempty" gorm:"column:description;" validate:"required"`
 	Specification string `json:"specification,omitempty" gorm:"column:specification;" validate:"required"`
+	Status        *bool  `json:"status" gorm:"column:status;" validate:"required,boolean"`
+}
+
+type ProductResponse struct {
+	ID            string `json:"id"`
+	Name          string `json:"name"`
+	TotalStock    *int   `json:"totalStock"`
+	Price         *int   `json:"price"`
+	Description   string `json:"description,omitempty"`
+	Specification string `json:"specification,omitempty"`
+	Status        *bool  `json:"status"`
 }
 
 type ProductRepositoryInterface interface {
 	BeginTransaction() *gorm.DB
 	CommitTransaction(*gorm.DB) error
 	RollbackTransaction(*gorm.DB) error
-	
+
 	GetAllByTenantID(string, utils.Pagination) (*utils.Pagination, error)
+	GetByID(string, string) (*entity.Product, error)
 	CreateProduct(*gorm.DB, CreateProduct) (string, error)
 }
 
 type ProductUseCaseInterface interface {
 	GetAllByTenantID(string, PaginationRequest) (*utils.Pagination, error)
+	GetByID(string, string, string) (*ProductResponse, error)
 	CreateProduct(CreateProduct) (string, error)
 }

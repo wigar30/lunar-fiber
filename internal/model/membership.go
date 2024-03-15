@@ -30,6 +30,7 @@ type MembershipRepositoryInterface interface {
 	CommitTransaction(*gorm.DB) error
 	RollbackTransaction(*gorm.DB) error
 
+	CheckIsAuthTenant(string, string) (bool, error)
 	CreateMembership(*gorm.DB, CreateMembership) (string, error)
 }
 

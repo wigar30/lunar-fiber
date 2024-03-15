@@ -15,6 +15,7 @@ type Product struct {
 	Price         *int    `json:"price,omitempty" gorm:"not null;column:price;default:0"`
 	Description   string  `json:"description,omitempty" gorm:"column:description;"`
 	Specification string  `json:"specification,omitempty" gorm:"column:specification;"`
+	Status        *bool    `json:"status" gorm:"column:status;"`
 	Tenant        *Tenant `json:"tenant,omitempty" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:TenantID"`
 	DefaultColumn `gorm:"embedded"`
 }

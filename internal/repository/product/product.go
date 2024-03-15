@@ -55,14 +55,35 @@ func (pr *ProductRepository) GetAllByTenantID(tenantID string, p utils.Paginatio
 	return &p, nil
 }
 
+func (pr *ProductRepository) GetByID(tenantID string, productID string) (*entity.Product, error) {
+	var product *entity.Product
+
+	err := pr.db.Where(&entity.Product{ TenantID: tenantID }).First(&product, productID).Error
+	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, &model.ErrorResponse{
+			Code:    fiber.StatusNotFound,
+			Message: err.Error(),
+		}
+	}
+	if err != nil {
+		return nil, &model.ErrorResponse{
+			Code:    fiber.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+
+	return product, nil
+}
+
 func (pr *ProductRepository) CreateProduct(tx *gorm.DB, product model.CreateProduct) (string, error) {
 	productResult := &entity.Product{
-		TenantID: product.TenantID,
-		Name: product.Name,
-		TotalStock: product.TotalStock,
-		Description: product.Description,
+		TenantID:      product.TenantID,
+		Name:          product.Name,
+		TotalStock:    product.TotalStock,
+		Description:   product.Description,
 		Specification: product.Specification,
-		Price: product.Price,
+		Price:         product.Price,
+		Status:        product.Status,
 	}
 	err := tx.Create(&productResult).Error
 	if err != nil {

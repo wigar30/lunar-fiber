@@ -18,6 +18,7 @@ func TenantSeed(db *driver.Database) error {
 				Name: "Tenant User",
 				TotalProduct: 0,
 				LevelID: "1",
+				Status: true,
 			}
 			tx.Create(&tenant)
 
@@ -51,6 +52,7 @@ func TenantSeed(db *driver.Database) error {
 				Name: "Tenant User 2",
 				TotalProduct: 0,
 				LevelID: "2",
+				Status: true,
 			}
 			tx.Create(&tenant)
 

@@ -49,7 +49,7 @@ func NewWire() config.HTTPServiceInterface {
 	validate := config.NewValidator()
 	tenantController := tenant3.NewTenantController(tenantUseCaseInterface, validate)
 	productRepositoryInterface := product.NewProductRepository(database)
-	productUseCaseInterface := product2.NewProductUseCase(productRepositoryInterface)
+	productUseCaseInterface := product2.NewProductUseCase(productRepositoryInterface, membershipRepositoryInterface)
 	productController := product3.NewProductController(productUseCaseInterface, validate)
 	controllerController := controller.NewController(roleController, authController, userController, tenantController, productController)
 	middlewareMiddleware := middleware.NewMiddleware(userRepositoryInterface, roleRepositoryInterface, envConfigs)

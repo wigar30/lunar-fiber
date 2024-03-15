@@ -43,6 +43,22 @@ func (pc *ProductController) GetAllByTenantID(c *fiber.Ctx) error {
 	return model.OnSuccess(c, resp)
 }
 
+func (pc *ProductController) GetByID(c *fiber.Ctx) error {
+	claims, _ := c.Locals("claims").(*model.JwtClaims)
+	tenantID := c.Params("id")
+	productID := c.Params("productId")
+	
+	resp, err := pc.productUseCase.GetByID(claims.ID, tenantID, productID)
+	if err, errC := err.(*model.ErrorResponse); errC {
+		return model.OnError(c, &model.ErrorResponse{
+			Code:    err.Code,
+			Message: err.Error(),
+		})
+	}
+
+	return model.OnSuccess(c, resp)
+}
+
 func (pc *ProductController) CreateProduct(c *fiber.Ctx) error {
 	payload := new(model.CreateProduct)
 
