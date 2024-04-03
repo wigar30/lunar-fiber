@@ -10,5 +10,6 @@ type Tenant struct {
 	Memberships   []Membership `json:"memberships,omitempty" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:TenantID"`
 	Products      []*Product   `json:"products,omitempty" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:TenantID"`
 	SummaryStat   *SummaryStat `json:"summaryStat" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:TenantID"`
+	Avatar        string       `json:"avatar" gorm:"column:avatar;"`
 	DefaultColumn `gorm:"embedded"`
 }

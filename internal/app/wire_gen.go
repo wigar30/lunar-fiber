@@ -12,19 +12,24 @@ import (
 	"lunar-commerce-fiber/internal/presenter/http/controller"
 	auth2 "lunar-commerce-fiber/internal/presenter/http/controller/auth"
 	product3 "lunar-commerce-fiber/internal/presenter/http/controller/product"
+	productimage3 "lunar-commerce-fiber/internal/presenter/http/controller/productimage"
 	role3 "lunar-commerce-fiber/internal/presenter/http/controller/role"
 	tenant3 "lunar-commerce-fiber/internal/presenter/http/controller/tenant"
+	upload2 "lunar-commerce-fiber/internal/presenter/http/controller/upload"
 	user3 "lunar-commerce-fiber/internal/presenter/http/controller/user"
 	"lunar-commerce-fiber/internal/presenter/http/middleware"
 	"lunar-commerce-fiber/internal/repository/membership"
 	"lunar-commerce-fiber/internal/repository/product"
+	"lunar-commerce-fiber/internal/repository/productimage"
 	"lunar-commerce-fiber/internal/repository/role"
 	"lunar-commerce-fiber/internal/repository/tenant"
 	"lunar-commerce-fiber/internal/repository/user"
 	"lunar-commerce-fiber/internal/usecase/auth"
 	product2 "lunar-commerce-fiber/internal/usecase/product"
+	productimage2 "lunar-commerce-fiber/internal/usecase/productimage"
 	role2 "lunar-commerce-fiber/internal/usecase/role"
 	tenant2 "lunar-commerce-fiber/internal/usecase/tenant"
+	"lunar-commerce-fiber/internal/usecase/upload"
 	user2 "lunar-commerce-fiber/internal/usecase/user"
 )
 
@@ -51,7 +56,12 @@ func NewWire() config.HTTPServiceInterface {
 	productRepositoryInterface := product.NewProductRepository(database)
 	productUseCaseInterface := product2.NewProductUseCase(productRepositoryInterface, membershipRepositoryInterface)
 	productController := product3.NewProductController(productUseCaseInterface, validate)
-	controllerController := controller.NewController(roleController, authController, userController, tenantController, productController)
+	productImageRepositoryInterface := productimage.NewProductImageRepository(database)
+	uploadUseCaseInterface := upload.NewUploadUseCase()
+	productImageUseCaseInterface := productimage2.NewProductImageUseCase(productImageRepositoryInterface, uploadUseCaseInterface)
+	productImageController := productimage3.NewProductImageController(productImageUseCaseInterface, validate)
+	uploadController := upload2.NewUploadController(uploadUseCaseInterface, envConfigs)
+	controllerController := controller.NewController(roleController, authController, userController, tenantController, productController, productImageController, uploadController)
 	middlewareMiddleware := middleware.NewMiddleware(userRepositoryInterface, roleRepositoryInterface, envConfigs)
 	httpServiceInterface := config.NewListenApp(app, controllerController, envConfigs, logger, middlewareMiddleware)
 	return httpServiceInterface

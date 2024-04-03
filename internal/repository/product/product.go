@@ -58,7 +58,7 @@ func (pr *ProductRepository) GetAllByTenantID(tenantID string, p utils.Paginatio
 func (pr *ProductRepository) GetByID(tenantID string, productID string) (*entity.Product, error) {
 	var product *entity.Product
 
-	err := pr.db.Where(&entity.Product{ TenantID: tenantID }).First(&product, productID).Error
+	err := pr.db.Where(&entity.Product{ TenantID: tenantID }).Joins("ProductImages").First(&product, productID).Error
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, &model.ErrorResponse{
 			Code:    fiber.StatusNotFound,

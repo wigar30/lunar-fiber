@@ -31,6 +31,9 @@ func NewViper() *model.EnvConfigs {
 	config.BindEnv("DbUsername", "DB_USERNAME")
 	config.BindEnv("DbPassword", "DB_PASSWORD")
 
+	config.BindEnv("FileSizeLimit", "FILE_SIZE_LIMIT")
+	config.BindEnv("ImageSizeLimit", "IMAGE_SIZE_LIMIT")
+
 	config.BindEnv("LogLevel", "LOG_LEVEL")
 
 	config.BindEnv("JwtExpiredIn", "AUTH_JWT_SECRET")

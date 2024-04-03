@@ -20,6 +20,7 @@ type User struct {
 	Status        *Status      `json:"status,omitempty" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:StatusID"`
 	Hash          string       `json:"hash,omitempty"`
 	Memberships   []Membership `json:"membership,omitempty" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:UserID"`
+	Avatar        string       `json:"avatar" gorm:"column:avatar;"`
 	DefaultColumn `gorm:"embedded"`
 }
 

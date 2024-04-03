@@ -1,7 +1,7 @@
 package model
 
 type EnvConfigs struct {
-	AppName string `mapstructure:"APP_NAME"` 
+	AppName string `mapstructure:"APP_NAME"`
 	AppEnv  string `mapstructure:"APP_ENV"`
 	AppPort string `mapstructure:"APP_PORT"`
 
@@ -16,4 +16,7 @@ type EnvConfigs struct {
 
 	JwtSecret    string `mapstructure:"AUTH_JWT_SECRET"`
 	JwtExpiredIn string `mapstructure:"AUTH_JWT_TOKEN_EXPIRES_IN"`
+
+	ImageSizeLimit int `mapstructure:"IMAGE_SIZE_LIMIT"`
+	FileSizeLimit  int `mapstructure:"FILE_SIZE_LIMIT"`
 }

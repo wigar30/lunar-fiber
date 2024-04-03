@@ -15,16 +15,19 @@ type CreateProduct struct {
 	Description   string `json:"description,omitempty" gorm:"column:description;" validate:"required"`
 	Specification string `json:"specification,omitempty" gorm:"column:specification;" validate:"required"`
 	Status        *bool  `json:"status" gorm:"column:status;" validate:"required,boolean"`
+	Avatar        string `json:"avatar" gorm:"column:avatar;" validate:""`
 }
 
 type ProductResponse struct {
-	ID            string `json:"id"`
-	Name          string `json:"name"`
-	TotalStock    *int   `json:"totalStock"`
-	Price         *int   `json:"price"`
-	Description   string `json:"description,omitempty"`
-	Specification string `json:"specification,omitempty"`
-	Status        *bool  `json:"status"`
+	ID            string                 `json:"id"`
+	Name          string                 `json:"name"`
+	TotalStock    *int                   `json:"totalStock"`
+	TotalSold     int                    `json:"totalSold"`
+	Price         *int                   `json:"price"`
+	Description   string                 `json:"description,omitempty"`
+	Specification string                 `json:"specification,omitempty"`
+	Status        *bool                  `json:"status"`
+	ProductImages []*entity.ProductImage `json:"productImages"`
 }
 
 type ProductRepositoryInterface interface {

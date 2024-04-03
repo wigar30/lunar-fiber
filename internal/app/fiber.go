@@ -10,17 +10,22 @@ import (
 	userCtrl "lunar-commerce-fiber/internal/presenter/http/controller/user"
 	tenantCtrl "lunar-commerce-fiber/internal/presenter/http/controller/tenant"
 	productCtrl "lunar-commerce-fiber/internal/presenter/http/controller/product"
+	productImageCtrl "lunar-commerce-fiber/internal/presenter/http/controller/productimage"
+	uploadCtrl "lunar-commerce-fiber/internal/presenter/http/controller/upload"
 	"lunar-commerce-fiber/internal/presenter/http/middleware"
 	roleRepo "lunar-commerce-fiber/internal/repository/role"
 	userRepo "lunar-commerce-fiber/internal/repository/user"
 	tenantRepo "lunar-commerce-fiber/internal/repository/tenant"
 	productRepo "lunar-commerce-fiber/internal/repository/product"
+	productImageRepo "lunar-commerce-fiber/internal/repository/productimage"
 	membershipRepo "lunar-commerce-fiber/internal/repository/membership"
 	authUC "lunar-commerce-fiber/internal/usecase/auth"
 	roleUC "lunar-commerce-fiber/internal/usecase/role"
 	userUC "lunar-commerce-fiber/internal/usecase/user"
 	tenantUC "lunar-commerce-fiber/internal/usecase/tenant"
 	productUC "lunar-commerce-fiber/internal/usecase/product"
+	productImageUC "lunar-commerce-fiber/internal/usecase/productimage"
+	uploadUC "lunar-commerce-fiber/internal/usecase/upload"
 
 	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
@@ -44,6 +49,8 @@ var (
 		userCtrl.NewUserController,
 		tenantCtrl.NewTenantController,
 		productCtrl.NewProductController,
+		productImageCtrl.NewProductImageController,
+		uploadCtrl.NewUploadController,
 	)
 
 	UseCaseSet = wire.NewSet(
@@ -52,6 +59,8 @@ var (
 		userUC.NewUserUseCase,
 		tenantUC.NewTenantUseCase,
 		productUC.NewProductUseCase,
+		productImageUC.NewProductImageUseCase,
+		uploadUC.NewUploadUseCase,
 	)
 
 	RepositorySet = wire.NewSet(
@@ -59,6 +68,7 @@ var (
 		userRepo.NewUserRepository,
 		tenantRepo.NewTenantRepository,
 		productRepo.NewProductRepository,
+		productImageRepo.NewProductImageRepository,
 		membershipRepo.NewMembershipRepository,
 	)
 
@@ -82,6 +92,7 @@ func NewFiber(config *model.EnvConfigs) *fiber.App {
 		ErrorHandler: NewErrorHandler(),
 		Prefork: config.AppEnv == "production",
 		Immutable: true,
+		BodyLimit: config.FileSizeLimit,
 
 		JSONEncoder: json.Marshal,
 		JSONDecoder: json.Unmarshal,

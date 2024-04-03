@@ -64,6 +64,8 @@ func (f *HTTPService) ListenApp() error {
 
 	router.Route(f.app, f.ctrl, f.mdlwr)
 
+	f.app.Static("/storages", "./storages")
+
 	f.app.Use(func(c *fiber.Ctx) error {
 		return model.OnError(c, &model.ErrorResponse{
 			Code:    fiber.StatusNotFound,

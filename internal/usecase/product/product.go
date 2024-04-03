@@ -50,10 +50,12 @@ func (pu *ProductUseCase) GetByID(userID string, tenantID string, productID stri
 		ID: product.ID,
 		Name: product.Name,
 		TotalStock: product.TotalStock,
+		TotalSold: *product.TotalSold,
 		Price: product.Price,
 		Description: product.Description,
 		Specification: product.Specification,
 		Status: product.Status,
+		ProductImages: product.ProductImages,
 	}, nil
 }
 

@@ -7,16 +7,18 @@ func (Product) TableName() string {
 }
 
 type Product struct {
-	ID            string  `json:"id" gorm:"primaryKey;autoIncrement"`
-	TenantID      string  `json:"tenantId,omitempty" gorm:"not null;column:tenantId"`
-	Name          string  `json:"name" gorm:"not null"`
-	TotalStock    *int    `json:"totalStock,omitempty" gorm:"not null;column:totalStock;default:0"`
-	TotalSold     *int    `json:"totalSold,omitempty" gorm:"not null;column:totalSold;default:0"`
-	Price         *int    `json:"price,omitempty" gorm:"not null;column:price;default:0"`
-	Description   string  `json:"description,omitempty" gorm:"column:description;"`
-	Specification string  `json:"specification,omitempty" gorm:"column:specification;"`
-	Status        *bool    `json:"status" gorm:"column:status;"`
-	Tenant        *Tenant `json:"tenant,omitempty" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:TenantID"`
+	ID            string          `json:"id" gorm:"primaryKey;autoIncrement"`
+	TenantID      string          `json:"tenantId,omitempty" gorm:"not null;column:tenantId"`
+	Name          string          `json:"name" gorm:"not null"`
+	TotalStock    *int            `json:"totalStock,omitempty" gorm:"not null;column:totalStock;default:0"`
+	TotalSold     *int            `json:"totalSold,omitempty" gorm:"not null;column:totalSold;default:0"`
+	Price         *int            `json:"price,omitempty" gorm:"not null;column:price;default:0"`
+	Description   string          `json:"description,omitempty" gorm:"column:description;"`
+	Specification string          `json:"specification,omitempty" gorm:"column:specification;"`
+	Avatar        string          `json:"avatar" gorm:"column:avatar;"`
+	Status        *bool           `json:"status" gorm:"column:status;"`
+	Tenant        *Tenant         `json:"tenant,omitempty" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:TenantID"`
+	ProductImages []*ProductImage `json:"productImages" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;foreignKey:ProductID"`
 	DefaultColumn `gorm:"embedded"`
 }
 

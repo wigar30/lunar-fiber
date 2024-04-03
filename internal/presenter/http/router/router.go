@@ -33,5 +33,8 @@ func Route(f *fiber.App, ctrl *controller.Controller, m *middleware.Middleware) 
 
 	product := v1.Group("product", m.AuthMiddleware.ValidateToken())
 	product.Post("/", ctrl.Product.CreateProduct)
+	product.Post("/images", ctrl.ProductImage.CreateProductImage)
 
+	upload := v1.Group("upload", m.AuthMiddleware.ValidateToken())
+	upload.Post("/image", ctrl.Upload.UploadImage)
 }
